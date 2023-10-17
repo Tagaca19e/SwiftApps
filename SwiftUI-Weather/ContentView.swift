@@ -9,61 +9,49 @@ import SwiftUI
 
 // View here
 struct ContentView: View {
+  // Views are created and destroyed but with @State, this is not created or
+  // destroyed. They are stored somewhere else.
+  @State private var isNight = false
+  let dates: [String] = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+  let temperatureIcons: [String] = [
+    "cloud.drizzle.fill",
+    "cloud.sun.fill",
+    "cloud.fill",
+    "wind",
+    "snowflake"
+  ]
+  let temperatures: [Int] = [40, 80, 70, 55, 20]
+  
   var body: some View {
     ZStack {
-      BackgroundView(topColor: .blue,
-                     bottomColor: Color("lightBlue"))
+      // Linear background
+      BackgroundView(isNight: $isNight) // $ for binding
 
+      // City text
       VStack(spacing: 8) {
-        // Text is a view, takes in a string.
-        Text("Cupertino, CA")
-          .font(.system(size: 32, weight: .medium, design: .default))
-          .foregroundColor(.white)
-          .padding()
+        CityTextView(cityName: "Cupertino, CA")
 
-        VStack(spacing: 8) {
-          Image(systemName: "cloud.sun.fill")
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit) // Make aspect ratio fit within frame.
-            .frame(width: 180, height: 180)
-
-          Text("76")
-            .font(.system(size: 70, weight: .medium))
-            .foregroundColor(.white)
-        }
-         .padding(.bottom, 40)
-
+        MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
+                              temperature: 70)
 
         // Columns of weather information.
         HStack(spacing: 20) {
-          WeatherDayView(dayOfWeek: "MON",
-                         imageName: "cloud.drizzle.fill",
-                         temperature: 40)
-          WeatherDayView(dayOfWeek: "TUE",
-                         imageName: "cloud.sun.fill",
-                         temperature: 80)
-          WeatherDayView(dayOfWeek: "WED",
-                         imageName: "cloud.fill",
-                         temperature: 70)
-          WeatherDayView(dayOfWeek: "THU",
-                         imageName: "wind",
-                         temperature: 55)
-          WeatherDayView(dayOfWeek: "FRI",
-                         imageName: "snowflake",
-                         temperature: 20)
+          ForEach(dates.indices, id: \.self) { idx in
+            // Display each weather day information.
+            WeatherDayView(dayOfWeek: dates[idx],
+                           imageName: temperatureIcons[idx],
+                           temperature: temperatures[idx])
+          }
         }
 
         Spacer()
 
         Button {
-          print("tapped")
+          isNight = !isNight
         } label: {
-          Text("Change Day Time")
-            .frame(width: 280, height: 50)
-            .background(Color.white)
-            .font(.system(size: 20, weight: .bold, design: .default))
-            .cornerRadius(10)
+          WeatherButton(title: "Change Day Time",
+                        textColor: .blue,
+                        backgroundColor: .white)
         }
 
         // Spacers will fill all the space.
@@ -74,15 +62,21 @@ struct ContentView: View {
 }
 
 struct BackgroundView: View {
-  var topColor: Color
-  var bottomColor: Color
+  // Binds the color that is already declared in the main
+  // view so that they are always in sync.
+  @Binding var isNight: Bool
   
   // Return body view.
   var body: some View {
-    LinearGradient(gradient: Gradient(colors: [topColor, bottomColor]),
-                   startPoint: .topLeading,
-                   endPoint: .bottomTrailing)
-      .edgesIgnoringSafeArea(.all)
+    
+//    LinearGradient(gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : Color("lightBlue")]),
+//                   startPoint: .topLeading,
+//                   endPoint: .bottomTrailing)
+//    .ignoresSafeArea(.all)
+    
+    ContainerRelativeShape()
+      .fill(isNight ? Color.black.gradient : Color.blue.gradient)
+      .ignoresSafeArea()
   }
 }
 
@@ -100,15 +94,28 @@ struct WeatherDayView: View {
         .foregroundColor(.white)
 
       Image(systemName: imageName)
-        .renderingMode(.original)
+        .symbolRenderingMode(.multicolor)
+//        .symbolRenderingMode(.palette)  // New palette design, multiple colors
         .resizable()
+//        .foregroundStyle(.white, .orange, .green)  // Colors for the icons
         .aspectRatio(contentMode: .fit)
         .frame(width: 40, height: 40)
       
-      Text("\(temperature)°") // cmd + shift + 8 = degree icon
+      Text("\(temperature)°") // opt + shift + 8 = degree icon
         .font(.system(size: 25, weight: .medium))
         .foregroundColor(.white)
     }
+  }
+}
+
+struct CityTextView: View {
+  var cityName: String
+  
+  var body: some View {
+    Text(cityName)
+      .font(.system(size: 32, weight: .medium, design: .default))
+      .foregroundColor(.white)
+      .padding()
   }
 }
 
@@ -118,8 +125,22 @@ struct ContentView_Previews: PreviewProvider {
   }
 }
 
-struct Previews_ContentView_Previews: PreviewProvider {
-  static var previews: some View {
-    /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+struct MainWeatherStatusView: View {
+  var imageName: String
+  var temperature: Int
+  
+  var body: some View {
+    VStack(spacing: 8) {
+      Image(systemName: imageName)
+        .renderingMode(.original)
+        .resizable()
+        .aspectRatio(contentMode: .fit) // Make aspect ratio fit within frame.
+        .frame(width: 180, height: 180)
+
+      Text("\(temperature)°")
+        .font(.system(size: 70, weight: .medium))
+        .foregroundColor(.white)
+    }
+     .padding(.bottom, 40)
   }
 }
