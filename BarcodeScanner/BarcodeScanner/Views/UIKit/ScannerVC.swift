@@ -8,9 +8,15 @@
 import UIKit
 import AVFoundation
 
+enum CameraError: String {
+  case invalidDeviceInput
+  case invalidScannedValue
+}
+
 // List of commands no code body... just like prototypes in C++.
-protocol ScannerVCDelegate: class {
-  func didFind(barcode: String)
+protocol ScannerVCDelegate: AnyObject {
+  func didFind(barcode: String)        // Gets the barcode string.
+  func didSurface(error: CameraError)  // Puts up the error message.
 }
 
 final class ScannerVC: UIViewController {
@@ -23,9 +29,26 @@ final class ScannerVC: UIViewController {
     self.scannerDelegate = scannerDelegate
   }
   required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupCaptureSession()
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
     
+    guard let previewLayer = previewLayer else {
+      scannerDelegate?.didSurface(error: .invalidDeviceInput)
+      return
+    }
+
+    previewLayer.frame = view.layer.bounds
+  }
+  
   private func setupCaptureSession() {
     guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
+      scannerDelegate?.didSurface(error: .invalidDeviceInput)
       // Return if there is an error.
       return
     }
@@ -35,12 +58,14 @@ final class ScannerVC: UIViewController {
     do {
       try videoInput = AVCaptureDeviceInput(device: videoCaptureDevice)
     } catch {
+      scannerDelegate?.didSurface(error: .invalidDeviceInput)
       return  // Catch error later.
     }
     
     if captureSession.canAddInput(videoInput) {
       captureSession.addInput(videoInput)
     } else {
+      scannerDelegate?.didSurface(error: .invalidDeviceInput)
       return
     }
     
@@ -62,7 +87,27 @@ final class ScannerVC: UIViewController {
   }
 }
 
-
 extension ScannerVC: AVCaptureMetadataOutputObjectsDelegate {
-  
+  func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    // Check if there is a metadata object.
+    guard let object = metadataObjects.first else {
+      scannerDelegate?.didSurface(error: .invalidScannedValue)
+      return
+    }
+
+    // Check if AVMetadataMachineReadableCodeObject.
+    guard let machineReadableObject = object as? AVMetadataMachineReadableCodeObject else {
+      scannerDelegate?.didSurface(error: .invalidScannedValue)
+      return
+    }
+
+    // Get string value.
+    guard let barcode = machineReadableObject.stringValue else {
+      scannerDelegate?.didSurface(error: .invalidScannedValue)
+      return
+    }
+
+    // Send it to delegate.
+    scannerDelegate?.didFind(barcode: barcode)
+  }
 }
