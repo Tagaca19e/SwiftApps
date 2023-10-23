@@ -15,6 +15,10 @@
 		AD2571BC2AE374880055B825 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571BB2AE374880055B825 /* AccountView.swift */; };
 		AD2571BE2AE374910055B825 /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571BD2AE374910055B825 /* OrderView.swift */; };
 		AD2571C02AE380EF0055B825 /* Appetizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571BF2AE380EF0055B825 /* Appetizer.swift */; };
+		AD2571C22AE61F4C0055B825 /* AppetizerListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571C12AE61F4C0055B825 /* AppetizerListCell.swift */; };
+		AD2571C42AE620470055B825 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571C32AE620470055B825 /* NetworkManager.swift */; };
+		AD2571C62AE621610055B825 /* APError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571C52AE621610055B825 /* APError.swift */; };
+		AD2571C82AE628060055B825 /* AppetizerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2571C72AE628060055B825 /* AppetizerListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +31,10 @@
 		AD2571BB2AE374880055B825 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		AD2571BD2AE374910055B825 /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
 		AD2571BF2AE380EF0055B825 /* Appetizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appetizer.swift; sourceTree = "<group>"; };
+		AD2571C12AE61F4C0055B825 /* AppetizerListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppetizerListCell.swift; sourceTree = "<group>"; };
+		AD2571C32AE620470055B825 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		AD2571C52AE621610055B825 /* APError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APError.swift; sourceTree = "<group>"; };
+		AD2571C72AE628060055B825 /* AppetizerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppetizerListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,7 @@
 		AD2571AA2AE3742E0055B825 /* Apptetizers */ = {
 			isa = PBXGroup;
 			children = (
+				AD2571C12AE61F4C0055B825 /* AppetizerListCell.swift */,
 				AD2571BB2AE374880055B825 /* AccountView.swift */,
 				AD2571BF2AE380EF0055B825 /* Appetizer.swift */,
 				AD2571B92AE374780055B825 /* AppetizerListView.swift */,
@@ -66,7 +75,10 @@
 				AD2571AD2AE3742E0055B825 /* AppetizerTabView.swift */,
 				AD2571AF2AE374300055B825 /* Assets.xcassets */,
 				AD2571BD2AE374910055B825 /* OrderView.swift */,
+				AD2571C32AE620470055B825 /* NetworkManager.swift */,
+				AD2571C52AE621610055B825 /* APError.swift */,
 				AD2571B12AE374300055B825 /* Preview Content */,
+				AD2571C72AE628060055B825 /* AppetizerListViewModel.swift */,
 			);
 			path = Apptetizers;
 			sourceTree = "<group>";
@@ -150,8 +162,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD2571C02AE380EF0055B825 /* Appetizer.swift in Sources */,
+				AD2571C62AE621610055B825 /* APError.swift in Sources */,
+				AD2571C22AE61F4C0055B825 /* AppetizerListCell.swift in Sources */,
+				AD2571C82AE628060055B825 /* AppetizerListViewModel.swift in Sources */,
 				AD2571BC2AE374880055B825 /* AccountView.swift in Sources */,
 				AD2571AE2AE3742E0055B825 /* AppetizerTabView.swift in Sources */,
+				AD2571C42AE620470055B825 /* NetworkManager.swift in Sources */,
 				AD2571BA2AE374780055B825 /* AppetizerListView.swift in Sources */,
 				AD2571AC2AE3742E0055B825 /* Appetizers.swift in Sources */,
 				AD2571BE2AE374910055B825 /* OrderView.swift in Sources */,

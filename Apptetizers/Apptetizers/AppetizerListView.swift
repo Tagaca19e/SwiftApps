@@ -8,15 +8,24 @@
 import SwiftUI
 
 struct AppetizerListView: View {
+  @StateObject var viewModel = AppetizerListViewModel()
+
   var body: some View {
     NavigationView {
-      Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        .navigationTitle("🍟Appetizers")
+      // Loop through appetizers and display them.
+      List(viewModel.appetizers) { appetizer in
+        AppetizerListCell(appetizer: appetizer)
+      }
+      .navigationTitle("🍟 Appetizers")
+    }
+    .onAppear {
+      // When navigation view appears, this fires the function getAppetizers.
+      viewModel.getAppetizers()
     }
   }
 }
 
-struct ApptetizerListView_Previews: PreviewProvider {
+struct AppetizerListView_Previews: PreviewProvider {
   static var previews: some View {
     AppetizerListView()
   }
